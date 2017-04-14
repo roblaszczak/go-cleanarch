@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/roblaszczak/go-cleanarch"
+	"github.com/roblaszczak/go-cleanarch/cleanarch"
 	"os"
 	"path/filepath"
 )
