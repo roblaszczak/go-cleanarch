@@ -34,6 +34,8 @@ To run in provided directory
 
     cleanarch go/src/github.com/roblaszczak/awesome-cms
 
+Process will exit with code `1` if architecture is not valid, otherwise it will exit with `0`.
+
 ### Project schema requirements
 
 go-cleanarch assumes this files structure:
