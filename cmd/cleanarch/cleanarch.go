@@ -8,9 +8,6 @@ import (
 	"path/filepath"
 )
 
-
-
-
 func main() {
 	flag.Parse()
 	var path string
@@ -28,7 +25,11 @@ func main() {
 	fmt.Printf("[cleanarch] checking %s\n", path)
 
 	validator := cleanarch.NewValidator()
-	isValid, errors := validator.Validate(path)
+	isValid, errors, err := validator.Validate(path)
+	if err != nil {
+		panic(err)
+	}
+
 	if !isValid {
 		for _, err := range errors {
 			fmt.Println(err.Error())

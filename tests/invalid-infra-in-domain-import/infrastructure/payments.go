@@ -4,9 +4,9 @@ import (
 	"fmt"
 )
 
-type MysqlOrderRepository struct {}
+type MysqlOrderRepository struct{}
 
-func(r MysqlOrderRepository) AddOrder(id int) error {
+func (r MysqlOrderRepository) AddOrder(id int) error {
 	fmt.Printf("adding order %d", id)
 
 	return nil

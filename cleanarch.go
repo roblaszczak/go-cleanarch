@@ -2,6 +2,7 @@ package cleanarch
 
 import (
 	"fmt"
+	"go/ast"
 	"go/parser"
 	"go/token"
 	"io/ioutil"
@@ -16,45 +17,43 @@ type Layer string
 var Log = log.New(ioutil.Discard, "[cleanarch] ", log.LstdFlags|log.Lshortfile)
 
 const (
-	LayerDomain Layer = "domain"
-	LayerApplication Layer = "application"
+	LayerDomain         Layer = "domain"
+	LayerApplication    Layer = "application"
 	LayerInfrastructure Layer = "infrastructure"
-	LayerInterfaces Layer = "interfaces"
+	LayerInterfaces     Layer = "interfaces"
 )
 
-var LayersHierarchy = map[Layer]int {
-	LayerDomain: 1,
-	LayerApplication: 2,
+var LayersHierarchy = map[Layer]int{
+	LayerDomain:         1,
+	LayerApplication:    2,
 	LayerInfrastructure: 3,
-	LayerInterfaces: 4,
+	LayerInterfaces:     4,
 }
 
 var LayersAliases = map[string]Layer{
 	// Domain
-	"domain": LayerDomain,
+	"domain":   LayerDomain,
 	"entities": LayerDomain,
 
 	// Application
-	"app": LayerApplication,
+	"app":         LayerApplication,
 	"application": LayerApplication,
-	"usecases": LayerApplication,
-	"usecase": LayerApplication,
-	"use_cases": LayerApplication,
+	"usecases":    LayerApplication,
+	"usecase":     LayerApplication,
+	"use_cases":   LayerApplication,
 
 	// Infrastructure
 	"infrastructure": LayerInfrastructure,
-	"infra": LayerInfrastructure,
+	"infra":          LayerInfrastructure,
 
 	// Interfaces
 	"interfaces": LayerInterfaces,
-	"interface": LayerInterfaces,
+	"interface":  LayerInterfaces,
 }
-
-// todo - layers aliases
 
 func NewValidator() *Validator {
 	filesMetadata := make(map[string]LayerMetadata, 0)
-	return &Validator{filesMetadata:filesMetadata}
+	return &Validator{filesMetadata: filesMetadata}
 }
 
 type ValidationError error
@@ -63,13 +62,10 @@ type Validator struct {
 	filesMetadata map[string]LayerMetadata
 }
 
-func (v *Validator) Validate(root string) (bool, []ValidationError) {
-	// todo - return erros?
-	valid := true
-
+func (v *Validator) Validate(root string) (bool, []ValidationError, error) {
 	errors := []ValidationError{}
 
-	filepath.Walk(root, func(path string, fi os.FileInfo, err error) error {
+	err := filepath.Walk(root, func(path string, fi os.FileInfo, err error) error {
 		if fi.IsDir() {
 			return nil
 		}
@@ -90,7 +86,6 @@ func (v *Validator) Validate(root string) (bool, []ValidationError) {
 
 		fset := token.NewFileSet()
 
-
 		f, err := parser.ParseFile(fset, path, nil, parser.ImportsOnly)
 		if err != nil {
 			panic(err)
@@ -102,48 +97,55 @@ func (v *Validator) Validate(root string) (bool, []ValidationError) {
 
 		if importerMeta.Layer == "" || importerMeta.Module == "" {
 			// todo - error from meta parser?
-			Log.Printf("WARN: cannot parse metadata for file %s, meta: %+v\n", path, importerMeta)
+			Log.Printf("cannot parse metadata for file %s, meta: %+v\n", path, importerMeta)
 			return nil
 		}
 
 		Log.Println(f.Name, f.Package, f.Scope)
 		for _, imp := range f.Imports {
-			importPath := imp.Path.Value
-			importPath = strings.TrimSuffix(importPath, `"`)
-			importPath = strings.TrimPrefix(importPath, `"`)
-
-			importMeta := v.fileMetadata(importPath)
-			Log.Printf("import: %s, importMeta: %+v\n", importPath, importMeta)
-
-			if importMeta.Module == importerMeta.Module {
-				if LayersHierarchy[importMeta.Layer] > LayersHierarchy[importerMeta.Layer] {
-					err := fmt.Errorf(
-						"you cannot import %s layer (%s) to %s layer (%s)",
-						importMeta.Layer, importPath,
-						importerMeta.Layer, path,
-					)
-					errors = append(errors, err)
-					valid = false
-				}
-			} else if importMeta.Layer != "" {
-				if importMeta.Layer != LayerInterfaces && importerMeta.Layer != LayerInfrastructure {
-					// todo - better handling
-					err := fmt.Errorf(
-						"ERROR: trying to import %s layer (%s) to %s layer (%s) between %s and %s modules, you can only import interfaces layer to infrastructure layer",
-						importMeta.Layer, importPath,
-						importerMeta.Layer, path,
-						importMeta.Module, importerMeta.Module,
-					)
-					errors = append(errors, err)
-					valid = false
-				}
-			}
+			validationErrors := v.validateImport(imp, importerMeta, path)
+			errors = append(errors, validationErrors...)
 		}
 
 		return nil
 	})
+	if err != nil {
+		return false, nil, err
+	}
 
-	return valid, errors
+	return len(errors) == 0, errors, nil
+}
+
+func (v *Validator) validateImport(imp *ast.ImportSpec, importerMeta LayerMetadata, path string) []ValidationError {
+	errors := []ValidationError{}
+
+	importPath := imp.Path.Value
+	importPath = strings.TrimSuffix(importPath, `"`)
+	importPath = strings.TrimPrefix(importPath, `"`)
+	importMeta := v.fileMetadata(importPath)
+
+	Log.Printf("import: %s, importMeta: %+v\n", importPath, importMeta)
+	if importMeta.Module == importerMeta.Module {
+		if LayersHierarchy[importMeta.Layer] > LayersHierarchy[importerMeta.Layer] {
+			err := fmt.Errorf(
+				"you cannot import %s layer (%s) to %s layer (%s)",
+				importMeta.Layer, importPath,
+				importerMeta.Layer, path,
+			)
+			errors = append(errors, err)
+		}
+	} else if importMeta.Layer != "" {
+		if importMeta.Layer != LayerInterfaces && importerMeta.Layer != LayerInfrastructure {
+			err := fmt.Errorf(
+				"trying to import %s layer (%s) to %s layer (%s) between %s and %s modules, you can only import interfaces layer to infrastructure layer",
+				importMeta.Layer, importPath,
+				importerMeta.Layer, path,
+				importMeta.Module, importerMeta.Module,
+			)
+			errors = append(errors, err)
+		}
+	}
+	return errors
 }
 
 func (v *Validator) fileMetadata(path string) LayerMetadata {
@@ -157,7 +159,7 @@ func (v *Validator) fileMetadata(path string) LayerMetadata {
 
 type LayerMetadata struct {
 	Module string
-	Layer Layer
+	Layer  Layer
 }
 
 func ParsePath(path string) LayerMetadata {
@@ -166,7 +168,7 @@ func ParsePath(path string) LayerMetadata {
 
 	metadata := LayerMetadata{}
 
-	for i := len(pathParts)-1; i >= 0; i-- {
+	for i := len(pathParts) - 1; i >= 0; i-- {
 		pathPart := pathParts[i]
 
 		// we assume that the path upper the layer is module name

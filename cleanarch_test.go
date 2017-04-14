@@ -6,8 +6,8 @@ import (
 )
 
 func TestValidator_Validate(t *testing.T) {
-	testCases := []struct{
-		Path string
+	testCases := []struct {
+		Path    string
 		IsValid bool
 	}{
 		{"tests/valid-simple", true},
@@ -20,7 +20,10 @@ func TestValidator_Validate(t *testing.T) {
 	for _, c := range testCases {
 		t.Run(c.Path, func(t *testing.T) {
 			validator := NewValidator()
-			valid, errors := validator.Validate(c.Path)
+			valid, errors, err := validator.Validate(c.Path)
+			if err != nil {
+				t.Fatal(err)
+			}
 
 			if valid != c.IsValid {
 				t.Errorf("path %s should be %t, but is %t", c.Path, c.IsValid, valid)
@@ -33,7 +36,7 @@ func TestValidator_Validate(t *testing.T) {
 }
 
 func TestParsePath(t *testing.T) {
-	testCases := []struct{
+	testCases := []struct {
 		Path                 string
 		ExpectedFileMetadata LayerMetadata
 	}{
@@ -41,42 +44,42 @@ func TestParsePath(t *testing.T) {
 			Path: "/tests/valid-simple/app/payment.go",
 			ExpectedFileMetadata: LayerMetadata{
 				Module: "valid-simple",
-				Layer: LayerApplication,
+				Layer:  LayerApplication,
 			},
 		},
 		{
 			Path: "/tests/valid-simple/domain/payment.go",
 			ExpectedFileMetadata: LayerMetadata{
 				Module: "valid-simple",
-				Layer: LayerDomain,
+				Layer:  LayerDomain,
 			},
 		},
 		{
 			Path: "/tests/valid-simple/infrastructure/payment.go",
 			ExpectedFileMetadata: LayerMetadata{
 				Module: "valid-simple",
-				Layer: LayerInfrastructure,
+				Layer:  LayerInfrastructure,
 			},
 		},
 		{
 			Path: "/tests/valid-simple/interfaces/payment.go",
 			ExpectedFileMetadata: LayerMetadata{
 				Module: "valid-simple",
-				Layer: LayerInterfaces,
+				Layer:  LayerInterfaces,
 			},
 		},
 		{
 			Path: "/tests/valid-simple/app/payments/payment.go",
 			ExpectedFileMetadata: LayerMetadata{
 				Module: "valid-simple",
-				Layer: LayerApplication,
+				Layer:  LayerApplication,
 			},
 		},
 		{
 			Path: "/tests/app/domain/payments/payment.go",
 			ExpectedFileMetadata: LayerMetadata{
 				Module: "app",
-				Layer: LayerDomain,
+				Layer:  LayerDomain,
 			},
 		},
 	}
