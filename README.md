@@ -1,0 +1,79 @@
+# Clean Architecture checker for Golang
+
+go-cleanarch was created to keep Clean Architecture rules,
+like a _The Dependency Rule_ and _interaction between modules_ in your Go projects.
+More about Clean Architecture you can read in [Uncle's Bob article](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html).
+
+![Clean Architecture](docs/go-cleanarch.png)
+
+## Installing
+
+    go get github.com/roblaszczak/go-cleanarch
+
+_go-cleanarch was only tested on Linux and also should work on OS X.
+Probably it doesn't work well on Windows._
+
+## Running
+
+To run in current directory:
+
+    cleanarch
+
+To run in provided directory
+
+    cleanarch go/src/github.com/roblaszczak/awesome-cms
+
+### Project schema requirements
+
+go-cleanarch assumes this files structure:
+
+    [GOPATH]/[PACKAGE_NAME]/[LAYER_NAME]
+
+or
+
+    [GOPATH]/[PACKAGE_NAME]/[MODULE_NAME]/[LAYER_NAME]
+
+For example
+
+* go/src/github.com/roblaszczak/awesome-app
+    * auth
+        * domain
+        * application
+        * interfaces
+    * content
+        * domain
+        * application
+        * interfaces
+    * frontend
+        * domain
+        * application
+        * interfaces
+
+For examples please go to [examples](examples/) directory,
+with contains examples of valid and invalid architectures.
+
+For more informations about Clean Architecture please read [Uncle's Bob article](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html)
+
+## Running the tests
+
+    make test
+
+## And coding style tests
+
+    make qa
+
+## Contributing
+
+Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+
+## Versioning
+
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags).
+
+## Credits
+
+Made without love by Robert Laszczak </3
+
+## License
+
+This project is licensed under the MIT License.

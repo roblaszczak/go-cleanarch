@@ -11,11 +11,11 @@ func TestValidator_Validate(t *testing.T) {
 		Path    string
 		IsValid bool
 	}{
-		{"../tests/valid-simple", true},
-		{"../tests/invalid-infra-in-domain-import", false},
-		{"../tests/invalid-app-in-domain-import", false},
-		{"../tests/invalid-import-between-modules-apps", false},
-		{"../tests/valid-cross-module-deps", true},
+		{"../examples/valid-simple", true},
+		{"../examples/invalid-infra-in-domain-import", false},
+		{"../examples/invalid-app-to-domain-import", false},
+		{"../examples/invalid-cross-module-deps", false},
+		{"../examples/valid-cross-module-deps", true},
 	}
 
 	for _, c := range testCases {
