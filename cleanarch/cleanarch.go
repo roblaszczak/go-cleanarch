@@ -26,8 +26,8 @@ const (
 var LayersHierarchy = map[Layer]int{
 	LayerDomain:         1,
 	LayerApplication:    2,
-	LayerInfrastructure: 3,
-	LayerInterfaces:     4,
+	LayerInterfaces:     3,
+	LayerInfrastructure: 4,
 }
 
 var LayersAliases = map[string]Layer{
@@ -42,13 +42,13 @@ var LayersAliases = map[string]Layer{
 	"usecase":     LayerApplication,
 	"use_cases":   LayerApplication,
 
-	// Infrastructure
-	"infrastructure": LayerInfrastructure,
-	"infra":          LayerInfrastructure,
-
 	// Interfaces
 	"interfaces": LayerInterfaces,
 	"interface":  LayerInterfaces,
+
+	// Infrastructure
+	"infrastructure": LayerInfrastructure,
+	"infra":          LayerInfrastructure,
 }
 
 func NewValidator() *Validator {

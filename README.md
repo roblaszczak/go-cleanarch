@@ -60,6 +60,29 @@ For example
         * application
         * interfaces
 
+Allowed `LAYER_NAME`:
+
+    var LayersAliases = map[string]Layer{
+        // Domain
+        "domain":   LayerDomain,
+        "entities": LayerDomain,
+
+        // Application
+        "app":         LayerApplication,
+        "application": LayerApplication,
+        "usecases":    LayerApplication,
+        "usecase":     LayerApplication,
+        "use_cases":   LayerApplication,
+
+        // Interfaces
+        "interfaces": LayerInterfaces,
+        "interface":  LayerInterfaces,
+
+        // Infrastructure
+        "infrastructure": LayerInfrastructure,
+        "infra":          LayerInfrastructure,
+    }
+
 For examples please go to [examples](examples/) directory,
 with contains examples of valid and invalid architectures.
 
