@@ -28,11 +28,11 @@ Probably it doesn't work well on Windows._
 
 To run in current directory:
 
-    cleanarch
+    go-cleanarch
 
 To run in provided directory
 
-    cleanarch go/src/github.com/roblaszczak/awesome-cms
+    go-cleanarch go/src/github.com/roblaszczak/awesome-cms
 
 Process will exit with code `1` if architecture is not valid, otherwise it will exit with `0`.
 
