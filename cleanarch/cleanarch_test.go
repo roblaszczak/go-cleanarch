@@ -16,6 +16,8 @@ func TestValidator_Validate(t *testing.T) {
 		{"../examples/invalid-app-to-domain-import", false},
 		{"../examples/invalid-cross-module-deps", false},
 		{"../examples/valid-cross-module-deps", true},
+		{"../examples/valid-imports-inside-module", true},
+		{"../examples/invalid-imports-between-submodules", false},
 	}
 
 	for _, c := range testCases {
