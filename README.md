@@ -17,25 +17,6 @@ _Source: The Clean Architecture_
 
 ![Clean Architecture](docs/go-cleanarch.png)
 
-## Installing
-
-    go get github.com/roblaszczak/go-cleanarch
-
-_go-cleanarch was only tested on Linux and also should work on OS X.
-Probably it doesn't work well on Windows._
-
-## Running
-
-To run in current directory:
-
-    cleanarch
-
-To run in provided directory
-
-    cleanarch go/src/github.com/roblaszczak/awesome-cms
-
-Process will exit with code `1` if architecture is not valid, otherwise it will exit with `0`.
-
 ### Project schema requirements
 
 go-cleanarch assumes this files structure:
@@ -55,6 +36,9 @@ For example
         * interfaces
     * content
         * domain
+            * submodule1
+            * submodule2
+            * *etc.*
         * application
         * interfaces
     * frontend
@@ -62,7 +46,7 @@ For example
         * application
         * interfaces
 
-Allowed `LAYER_NAME`:
+### Allowed `LAYER_NAME`:
 
     var LayersAliases = map[string]Layer{
         // Domain
@@ -89,6 +73,26 @@ For examples please go to [examples](examples/) directory,
 with contains examples of valid and invalid architectures.
 
 For more informations about Clean Architecture please read [Uncle's Bob article](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html)
+
+
+## Installing
+
+    go get github.com/roblaszczak/go-cleanarch
+
+_go-cleanarch was only tested on Linux and also should work on OS X.
+Probably it doesn't work well on Windows._
+
+## Running
+
+To run in current directory:
+
+    go-cleanarch
+
+To run in provided directory
+
+    go-cleanarch go/src/github.com/roblaszczak/awesome-cms
+
+Process will exit with code `1` if architecture is not valid, otherwise it will exit with `0`.
 
 ## Running the tests
 
