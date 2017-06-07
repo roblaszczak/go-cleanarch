@@ -2,6 +2,7 @@ package domain
 
 import "github.com/roblaszczak/go-cleanarch/examples/ignored-dirs/app"
 
+// Bar is not validated, because nogofile.wtf is not golang file (thx captain obvious).
 type Bar struct {
 	foo app.Foo
 }
