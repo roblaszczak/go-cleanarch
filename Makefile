@@ -4,4 +4,4 @@ test:
 	go test ./...
 
 qa:
-	gometalinter --enable=misspell --disable=golint --disable=gotype --deadline=30s .
+	gometalinter --enable=misspell --disable=gotype --deadline=30s .
