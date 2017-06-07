@@ -1,5 +1,7 @@
 # Clean Architecture checker for Golang
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/roblaszczak/go-cleanarch)](https://goreportcard.com/report/github.com/roblaszczak/go-cleanarch)
+
 go-cleanarch was created to keep Clean Architecture rules,
 like a _The Dependency Rule_ and _interaction between modules_ in your Go projects.
 More about Clean Architecture you can read in [Uncle's Bob article](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html).
