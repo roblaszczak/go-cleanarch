@@ -18,6 +18,7 @@ func TestValidator_Validate(t *testing.T) {
 		{"../examples/valid-cross-module-deps", true},
 		{"../examples/valid-imports-inside-module", true},
 		{"../examples/invalid-imports-between-submodules", false},
+		{"../examples/ignored-dirs", true},
 	}
 
 	for _, c := range testCases {
@@ -38,7 +39,7 @@ func TestValidator_Validate(t *testing.T) {
 	}
 }
 
-func TestParsePath(t *testing.T) {
+func TestParseLayerMetadata(t *testing.T) {
 	testCases := []struct {
 		Path                 string
 		ExpectedFileMetadata cleanarch.LayerMetadata
@@ -89,7 +90,7 @@ func TestParsePath(t *testing.T) {
 
 	for _, c := range testCases {
 		t.Run(c.Path, func(t *testing.T) {
-			metadata := cleanarch.ParsePath(c.Path)
+			metadata := cleanarch.ParseLayerMetadata(c.Path)
 
 			if !reflect.DeepEqual(metadata, c.ExpectedFileMetadata) {
 				t.Errorf("invalid metadata: %+v, expected %+v", metadata, c.ExpectedFileMetadata)
