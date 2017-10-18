@@ -57,6 +57,8 @@ var layersAliases = map[string]Layer{
 	// Interfaces
 	"interfaces": LayerInterfaces,
 	"interface":  LayerInterfaces,
+	"adapters":  LayerInterfaces,
+	"adapter":  LayerInterfaces,
 
 	// Infrastructure
 	"infrastructure": LayerInfrastructure,
