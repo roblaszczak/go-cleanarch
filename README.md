@@ -65,6 +65,8 @@ For example
         // Interfaces
         "interfaces": LayerInterfaces,
         "interface":  LayerInterfaces,
+        "adapters":   LayerInterfaces,
+        "adapter":    LayerInterfaces,
 
         // Infrastructure
         "infrastructure": LayerInfrastructure,
