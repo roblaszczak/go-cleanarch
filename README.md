@@ -98,6 +98,13 @@ To run in provided directory
 
 Process will exit with code `1` if architecture is not valid, otherwise it will exit with `0`.
 
+If you need to ignore `*_test.go` files in `go-cleanarch` check you can pass `-ignore-tests`
+
+    go-cleanarch -ignore-tests
+
+It is useful when you have memory implementation in infrastructure layer
+and you need to test application service which depends of it.
+
 ## Running the tests
 
     make test

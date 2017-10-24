@@ -8,6 +8,10 @@ import (
 	"path/filepath"
 )
 
+var (
+	ignoreTests = flag.Bool("ignore-tests", false, "if flag is passed *_test.go files will be not checked")
+)
+
 func main() {
 	flag.Parse()
 	var path string
@@ -25,7 +29,7 @@ func main() {
 	fmt.Printf("[cleanarch] checking %s\n", path)
 
 	validator := cleanarch.NewValidator()
-	isValid, errors, err := validator.Validate(path)
+	isValid, errors, err := validator.Validate(path, *ignoreTests)
 	if err != nil {
 		panic(err)
 	}

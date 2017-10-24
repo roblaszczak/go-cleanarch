@@ -80,7 +80,7 @@ type Validator struct {
 }
 
 // Validate validates provided path for Clean Architecture rules.
-func (v *Validator) Validate(root string) (bool, []ValidationError, error) {
+func (v *Validator) Validate(root string, ignoreTests bool) (bool, []ValidationError, error) {
 	errors := []ValidationError{}
 
 	err := filepath.Walk(root, func(path string, fi os.FileInfo, err error) error {
@@ -89,6 +89,10 @@ func (v *Validator) Validate(root string) (bool, []ValidationError, error) {
 		}
 
 		if !strings.HasSuffix(path, ".go") {
+			return nil
+		}
+
+		if ignoreTests && strings.HasSuffix(path, "_test.go") {
 			return nil
 		}
 

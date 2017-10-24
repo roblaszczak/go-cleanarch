@@ -10,21 +10,25 @@ func TestValidator_Validate(t *testing.T) {
 	testCases := []struct {
 		Path    string
 		IsValid bool
+		IgnoreTests bool
 	}{
-		{"../examples/valid-simple", true},
-		{"../examples/invalid-infra-in-domain-import", false},
-		{"../examples/invalid-app-to-domain-import", false},
-		{"../examples/invalid-cross-module-deps", false},
-		{"../examples/valid-cross-module-deps", true},
-		{"../examples/valid-imports-inside-module", true},
-		{"../examples/invalid-imports-between-submodules", false},
-		{"../examples/ignored-dirs", true},
+		{"../examples/valid-simple", true, false},
+		{"../examples/invalid-infra-in-domain-import", false, false},
+		{"../examples/invalid-app-to-domain-import", false, false},
+		{"../examples/invalid-cross-module-deps", false, false},
+		{"../examples/valid-cross-module-deps", true, false},
+		{"../examples/valid-imports-inside-module", true, false},
+		{"../examples/invalid-imports-between-submodules", false, false},
+		{"../examples/ignored-dirs", true, false},
+		{"../examples/ignored-dirs", true, false},
+		{"../examples/invalid-infrastructure-to-app-import-in-tests", true, true},
+		{"../examples/invalid-infrastructure-to-app-import-in-tests", false, false},
 	}
 
 	for _, c := range testCases {
 		t.Run(c.Path, func(t *testing.T) {
 			validator := cleanarch.NewValidator()
-			valid, errors, err := validator.Validate(c.Path)
+			valid, errors, err := validator.Validate(c.Path, c.IgnoreTests)
 			if err != nil {
 				t.Fatal(err)
 			}
