@@ -57,8 +57,8 @@ var layersAliases = map[string]Layer{
 	// Interfaces
 	"interfaces": LayerInterfaces,
 	"interface":  LayerInterfaces,
-	"adapters":  LayerInterfaces,
-	"adapter":  LayerInterfaces,
+	"adapters":   LayerInterfaces,
+	"adapter":    LayerInterfaces,
 
 	// Infrastructure
 	"infrastructure": LayerInfrastructure,
@@ -112,17 +112,16 @@ func (v *Validator) Validate(root string, ignoreTests bool) (bool, []ValidationE
 			panic(err)
 		}
 
-		Log.Println("processing: ", path)
+		Log.Print("processing: ", path)
 		importerMeta := v.fileMetadata(path)
-		Log.Printf("metadata: %+v\n", importerMeta)
+		Log.Printf("metadata: %+v", importerMeta)
 
 		if importerMeta.Layer == "" || importerMeta.Module == "" {
 			// todo - error from meta parser?
-			Log.Printf("cannot parse metadata for file %s, meta: %+v\n", path, importerMeta)
+			Log.Printf("cannot parse metadata for file %s, meta: %+v", path, importerMeta)
 			return nil
 		}
 
-		Log.Println(f.Name, f.Package, f.Scope)
 		for _, imp := range f.Imports {
 			validationErrors := v.validateImport(imp, importerMeta, path)
 			errors = append(errors, validationErrors...)
@@ -145,9 +144,14 @@ func (v *Validator) validateImport(imp *ast.ImportSpec, importerMeta LayerMetada
 	importPath = strings.TrimPrefix(importPath, `"`)
 	importMeta := v.fileMetadata(importPath)
 
-	Log.Printf("import: %s, importMeta: %+v\n", importPath, importMeta)
+	Log.Printf("import: %s, importMeta: %+v", importPath, importMeta)
+
 	if importMeta.Module == importerMeta.Module {
-		if layersHierarchy[importMeta.Layer] > layersHierarchy[importerMeta.Layer] {
+		importHierarchy := layersHierarchy[importMeta.Layer]
+		importerHierarchy := layersHierarchy[importerMeta.Layer]
+		Log.Printf("import hierarchy: %d, importer hierarchy: %d", importHierarchy, importerHierarchy)
+
+		if importHierarchy > importerHierarchy {
 			err := fmt.Errorf(
 				"you cannot import %s Layer (%s) to %s Layer (%s)",
 				importMeta.Layer, importPath,
@@ -156,7 +160,7 @@ func (v *Validator) validateImport(imp *ast.ImportSpec, importerMeta LayerMetada
 			errors = append(errors, err)
 		}
 	} else if importMeta.Layer != "" {
-		if importMeta.Layer != LayerInterfaces && importerMeta.Layer != LayerInfrastructure {
+		if importMeta.Layer != LayerInterfaces || importerMeta.Layer != LayerInfrastructure {
 			err := fmt.Errorf(
 				"trying to import %s Layer (%s) to %s Layer (%s) between %s and %s modules, you can only import interfaces Layer to infrastructure Layer",
 				importMeta.Layer, importPath,
@@ -187,7 +191,6 @@ type LayerMetadata struct {
 // ParseLayerMetadata parses metadata of provided path.
 func ParseLayerMetadata(path string) LayerMetadata {
 	pathParts := strings.Split(path, "/")
-	Log.Println(pathParts)
 
 	metadata := LayerMetadata{}
 

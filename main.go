@@ -3,18 +3,24 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/roblaszczak/go-cleanarch/cleanarch"
 	"os"
 	"path/filepath"
+
+	"github.com/roblaszczak/go-cleanarch/cleanarch"
 )
 
 var (
 	ignoreTests = flag.Bool("ignore-tests", false, "if flag is passed *_test.go files will be not checked")
+	debug       = flag.Bool("debug", false, "debug mode")
 )
 
 func main() {
 	flag.Parse()
 	var path string
+
+	if *debug {
+		cleanarch.Log.SetOutput(os.Stderr)
+	}
 
 	if len(flag.Args()) > 1 {
 		path = flag.Args()[1]

@@ -1,6 +1,6 @@
 package app
 
-type Product struct {}
+type Product struct{}
 
 func NewProduct() *Product {
 	return &Product{}

@@ -1,15 +1,22 @@
 package cleanarch_test
 
 import (
-	"github.com/roblaszczak/go-cleanarch/cleanarch"
+	"fmt"
+	"os"
 	"reflect"
 	"testing"
+
+	"github.com/roblaszczak/go-cleanarch/cleanarch"
 )
+
+func init() {
+	cleanarch.Log.SetOutput(os.Stderr)
+}
 
 func TestValidator_Validate(t *testing.T) {
 	testCases := []struct {
-		Path    string
-		IsValid bool
+		Path        string
+		IsValid     bool
 		IgnoreTests bool
 	}{
 		{"../examples/valid-simple", true, false},
@@ -19,6 +26,7 @@ func TestValidator_Validate(t *testing.T) {
 		{"../examples/valid-cross-module-deps", true, false},
 		{"../examples/valid-imports-inside-module", true, false},
 		{"../examples/invalid-imports-between-submodules", false, false},
+		{"../examples/invalid-imports-between-submodules-2", false, false},
 		{"../examples/ignored-dirs", true, false},
 		{"../examples/ignored-dirs", true, false},
 		{"../examples/invalid-infrastructure-to-app-import-in-tests", true, true},
@@ -32,6 +40,8 @@ func TestValidator_Validate(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
+
+			fmt.Println("errors: ", errors)
 
 			if valid != c.IsValid {
 				t.Errorf("path %s should be %t, but is %t", c.Path, c.IsValid, valid)

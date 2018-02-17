@@ -2,6 +2,7 @@ package infrastructure
 
 import (
 	"fmt"
+
 	"github.com/roblaszczak/go-cleanarch/examples/valid-simple/app"
 )
 
