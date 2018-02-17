@@ -81,7 +81,7 @@ For more informations about Clean Architecture please read [Uncle's Bob article]
 
 ## Installing
 
-    go get github.com/roblaszczak/go-cleanarch
+    go get -u gopkg.in/roblaszczak/go-cleanarch.v1
 
 _go-cleanarch was only tested on Linux and also should work on OS X.
 Probably it doesn't work well on Windows._
