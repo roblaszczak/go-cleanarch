@@ -1,3 +1,3 @@
-# Invalid cross module deps
+# Valid cross module deps
 
 ![Schema](schema.png)
