@@ -1,11 +1,13 @@
 package main
 
-import "fmt"
+import (
+	"strings"
+)
 
 type sliceFlag []string
 
 func (s *sliceFlag) String() string {
-	return fmt.Sprintf("%s", s)
+	return strings.Join(*s, ",")
 }
 
 func (s *sliceFlag) Set(v string) error {
