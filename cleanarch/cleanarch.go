@@ -80,7 +80,7 @@ type Validator struct {
 }
 
 // Validate validates provided path for Clean Architecture rules.
-func (v *Validator) Validate(root string, ignoreTests bool) (bool, []ValidationError, error) {
+func (v *Validator) Validate(root string, ignoreTests bool, ignoredPackages []string) (bool, []ValidationError, error) {
 	errors := []ValidationError{}
 
 	err := filepath.Walk(root, func(path string, fi os.FileInfo, err error) error {
@@ -122,7 +122,14 @@ func (v *Validator) Validate(root string, ignoreTests bool) (bool, []ValidationE
 			return nil
 		}
 
+	ImportsLoop:
 		for _, imp := range f.Imports {
+			for _, ignoredPackage := range ignoredPackages {
+				if strings.Contains(imp.Path.Value, ignoredPackage) {
+					continue ImportsLoop
+				}
+			}
+
 			validationErrors := v.validateImport(imp, importerMeta, path)
 			errors = append(errors, validationErrors...)
 		}

@@ -15,28 +15,34 @@ func init() {
 
 func TestValidator_Validate(t *testing.T) {
 	testCases := []struct {
-		Path        string
-		IsValid     bool
-		IgnoreTests bool
+		Path            string
+		IsValid         bool
+		IgnoreTests     bool
+		IgnoredPackages []string
 	}{
-		{"../examples/valid-simple", true, false},
-		{"../examples/invalid-infra-in-domain-import", false, false},
-		{"../examples/invalid-app-to-domain-import", false, false},
-		{"../examples/invalid-cross-module-deps", false, false},
-		{"../examples/valid-cross-module-deps", true, false},
-		{"../examples/valid-imports-inside-module", true, false},
-		{"../examples/invalid-imports-between-submodules", false, false},
-		{"../examples/invalid-imports-between-submodules-2", false, false},
-		{"../examples/ignored-dirs", true, false},
-		{"../examples/ignored-dirs", true, false},
-		{"../examples/invalid-infrastructure-to-app-import-in-tests", true, true},
-		{"../examples/invalid-infrastructure-to-app-import-in-tests", false, false},
+		{Path: "../examples/valid-simple", IsValid: true},
+		{Path: "../examples/invalid-infra-in-domain-import", IsValid: false},
+		{Path: "../examples/invalid-app-to-domain-import", IsValid: false},
+		{Path: "../examples/invalid-cross-module-deps", IsValid: false},
+		{Path: "../examples/valid-cross-module-deps", IsValid: true},
+		{Path: "../examples/valid-imports-inside-module", IsValid: true},
+		{Path: "../examples/invalid-imports-between-submodules", IsValid: false},
+		{Path: "../examples/invalid-imports-between-submodules-2", IsValid: false},
+		{Path: "../examples/ignored-dirs", IsValid: true},
+		{Path: "../examples/ignored-dirs", IsValid: true},
+		{Path: "../examples/invalid-infrastructure-to-app-import-in-tests", IsValid: true, IgnoreTests: true},
+		{Path: "../examples/invalid-infrastructure-to-app-import-in-tests", IsValid: false},
+		{
+			Path:            "../examples/ignore-package",
+			IsValid:         true,
+			IgnoredPackages: []string{"github.com/roblaszczak/go-cleanarch/examples/ignore-package/app"},
+		},
 	}
 
 	for _, c := range testCases {
 		t.Run(c.Path, func(t *testing.T) {
 			validator := cleanarch.NewValidator()
-			valid, errors, err := validator.Validate(c.Path, c.IgnoreTests)
+			valid, errors, err := validator.Validate(c.Path, c.IgnoreTests, c.IgnoredPackages)
 			if err != nil {
 				t.Fatal(err)
 			}

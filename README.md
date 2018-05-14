@@ -98,12 +98,24 @@ To run in provided directory
 
 Process will exit with code `1` if architecture is not valid, otherwise it will exit with `0`.
 
+### -ignore-tests
+
 If you need to ignore `*_test.go` files in `go-cleanarch` check you can pass `-ignore-tests`
 
     go-cleanarch -ignore-tests
 
 It is useful when you have memory implementation in infrastructure layer
 and you need to test application service which depends of it.
+
+### -ignore-package
+
+If for some reason you need to allow to make forbidden import, for example
+
+`github.com/roblaszczak/go-cleanarch/examples/ignore-package/app` to `github.com/roblaszczak/go-cleanarch/examples/ignore-package/domain`.
+
+you can use
+
+    go-cleanarch -ignore-package=github.com/roblaszczak/go-cleanarch/examples/ignore-package/app 
 
 ## Running the tests
 

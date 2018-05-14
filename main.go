@@ -9,12 +9,19 @@ import (
 	"github.com/roblaszczak/go-cleanarch/cleanarch"
 )
 
-var (
-	ignoreTests = flag.Bool("ignore-tests", false, "if flag is passed *_test.go files will be not checked")
-	debug       = flag.Bool("debug", false, "debug mode")
-)
-
 func main() {
+	ignoredPackages := sliceFlag{}
+
+	ignoreTests := flag.Bool("ignore-tests", false, "if flag is passed *_test.go files will be not checked")
+	debug := flag.Bool("debug", false, "debug mode")
+	flag.Var(
+		&ignoredPackages,
+		"ignore-package",
+		"provided packages can be imported to any layer, "+
+			"for example you can use`-ignore-package github.com/roblaszczak/go-cleanarch/infrastructure` to import "+
+			"this package to the domain",
+	)
+
 	flag.Parse()
 	var path string
 
@@ -35,7 +42,7 @@ func main() {
 	fmt.Printf("[cleanarch] checking %s\n", path)
 
 	validator := cleanarch.NewValidator()
-	isValid, errors, err := validator.Validate(path, *ignoreTests)
+	isValid, errors, err := validator.Validate(path, *ignoreTests, ignoredPackages)
 	if err != nil {
 		panic(err)
 	}
