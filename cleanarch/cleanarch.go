@@ -42,33 +42,13 @@ var layersHierarchy = map[Layer]int{
 	LayerInfrastructure: 4,
 }
 
-var layersAliases = map[string]Layer{
-	// Domain
-	"domain":   LayerDomain,
-	"entities": LayerDomain,
-
-	// Application
-	"app":         LayerApplication,
-	"application": LayerApplication,
-	"usecases":    LayerApplication,
-	"usecase":     LayerApplication,
-	"use_cases":   LayerApplication,
-
-	// Interfaces
-	"interfaces": LayerInterfaces,
-	"interface":  LayerInterfaces,
-	"adapters":   LayerInterfaces,
-	"adapter":    LayerInterfaces,
-
-	// Infrastructure
-	"infrastructure": LayerInfrastructure,
-	"infra":          LayerInfrastructure,
-}
-
 // NewValidator creates new Validator.
-func NewValidator() *Validator {
+func NewValidator(alias map[string]Layer) *Validator {
 	filesMetadata := make(map[string]LayerMetadata, 0)
-	return &Validator{filesMetadata: filesMetadata}
+	return &Validator{
+		filesMetadata: filesMetadata,
+		alias:         alias,
+	}
 }
 
 // ValidationError represents error when Clean Architecture rule is not keep.
@@ -77,6 +57,7 @@ type ValidationError error
 // Validator is responsible for Clean Architecture validation.
 type Validator struct {
 	filesMetadata map[string]LayerMetadata
+	alias         map[string]Layer
 }
 
 // Validate validates provided path for Clean Architecture rules.
@@ -185,7 +166,7 @@ func (v *Validator) fileMetadata(path string) LayerMetadata {
 		return metadata
 	}
 
-	v.filesMetadata[path] = ParseLayerMetadata(path)
+	v.filesMetadata[path] = ParseLayerMetadata(path, v.alias)
 	return v.filesMetadata[path]
 }
 
@@ -196,7 +177,7 @@ type LayerMetadata struct {
 }
 
 // ParseLayerMetadata parses metadata of provided path.
-func ParseLayerMetadata(path string) LayerMetadata {
+func ParseLayerMetadata(path string, alias map[string]Layer) LayerMetadata {
 	pathParts := strings.Split(path, "/")
 
 	metadata := LayerMetadata{}
@@ -210,7 +191,7 @@ func ParseLayerMetadata(path string) LayerMetadata {
 			break
 		}
 
-		for alias, layer := range layersAliases {
+		for alias, layer := range alias {
 			if pathPart == alias {
 				metadata.Layer = layer
 				continue
