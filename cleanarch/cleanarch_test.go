@@ -9,6 +9,29 @@ import (
 	"github.com/roblaszczak/go-cleanarch/cleanarch"
 )
 
+var layersAliases = map[string]cleanarch.Layer{
+	// Domain
+	"domain":   cleanarch.LayerDomain,
+	"entities": cleanarch.LayerDomain,
+
+	// Application
+	"app":         cleanarch.LayerApplication,
+	"application": cleanarch.LayerApplication,
+	"usecases":    cleanarch.LayerApplication,
+	"usecase":     cleanarch.LayerApplication,
+	"use_cases":   cleanarch.LayerApplication,
+
+	// Interfaces
+	"interfaces": cleanarch.LayerInterfaces,
+	"interface":  cleanarch.LayerInterfaces,
+	"adapters":   cleanarch.LayerInterfaces,
+	"adapter":    cleanarch.LayerInterfaces,
+
+	// Infrastructure
+	"infrastructure": cleanarch.LayerInfrastructure,
+	"infra":          cleanarch.LayerInfrastructure,
+}
+
 func init() {
 	cleanarch.Log.SetOutput(os.Stderr)
 }
@@ -41,7 +64,7 @@ func TestValidator_Validate(t *testing.T) {
 
 	for _, c := range testCases {
 		t.Run(c.Path, func(t *testing.T) {
-			validator := cleanarch.NewValidator()
+			validator := cleanarch.NewValidator(layersAliases)
 			valid, errors, err := validator.Validate(c.Path, c.IgnoreTests, c.IgnoredPackages)
 			if err != nil {
 				t.Fatal(err)
@@ -110,7 +133,7 @@ func TestParseLayerMetadata(t *testing.T) {
 
 	for _, c := range testCases {
 		t.Run(c.Path, func(t *testing.T) {
-			metadata := cleanarch.ParseLayerMetadata(c.Path)
+			metadata := cleanarch.ParseLayerMetadata(c.Path, layersAliases)
 
 			if !reflect.DeepEqual(metadata, c.ExpectedFileMetadata) {
 				t.Errorf("invalid metadata: %+v, expected %+v", metadata, c.ExpectedFileMetadata)

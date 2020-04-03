@@ -50,6 +50,10 @@ For example
 
 ### Allowed `LAYER_NAME`:
 
+The default layer names are as followed. It is possible to set different names
+by command line parameters see -domain/-application/-interfaces/-infrastructure
+bellow.
+
     var LayersAliases = map[string]Layer{
         // Domain
         "domain":   LayerDomain,
@@ -116,6 +120,16 @@ If for some reason you need to allow to make forbidden import, for example
 you can use
 
     go-cleanarch -ignore-package=github.com/roblaszczak/go-cleanarch/examples/ignore-package/app 
+
+### layer names
+
+The layer names can be set to a specific value with the following parameters. Each
+parameter stands for on layer.
+
+    go-cleanarch -domain dom -application appli -interfaces int -infrastructure outer
+
+This would only allow the domain name to be dom, application hast to be appli,
+interafces must be int and infrastructure must be outer.
 
 ## Running the tests
 
