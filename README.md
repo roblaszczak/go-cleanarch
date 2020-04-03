@@ -121,7 +121,7 @@ you can use
 
     go-cleanarch -ignore-package=github.com/roblaszczak/go-cleanarch/examples/ignore-package/app 
 
-### layer names
+### Layer names
 
 The layer names can be set to a specific value with the following parameters. Each
 parameter stands for on layer.
