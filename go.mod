@@ -1,3 +1,3 @@
-module gopkg.in/roblaszczak/go-cleanarch.v1
+module github.com/roblaszczak/go-cleanarch
 
 go 1.12
