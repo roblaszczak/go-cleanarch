@@ -4,7 +4,7 @@
 
 go-cleanarch was created to keep Clean Architecture rules,
 like a _The Dependency Rule_ and _interaction between modules_ in your Go projects.
-More about Clean Architecture you can read in [Uncle's Bob article](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html).
+More about Clean Architecture you can read in [our article](https://threedots.tech/post/introducing-clean-architecture/?utm_source=go-cleanarch).
 
 
 Some benefits of using Clean Architecture:
@@ -80,19 +80,19 @@ bellow.
 For examples please go to [examples](examples/) directory,
 with contains examples of valid and invalid architectures.
 
-For more informations about Clean Architecture please read [Uncle's Bob article](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html)
+For more informations about Clean Architecture please read [our article](https://threedots.tech/post/introducing-clean-architecture/?utm_source=go-cleanarch).
 
 
 ## Installing
 
-    go get -u gopkg.in/roblaszczak/go-cleanarch.v1
+    GO111MODULE=on go get github.com/roblaszczak/go-cleanarch
 
 _go-cleanarch was only tested on Linux and also should work on OS X.
 Probably it doesn't work well on Windows._
 
 ## Running
 
-To run in current directory:
+To run in the current directory:
 
     go-cleanarch
 
