@@ -4,7 +4,7 @@
 
 go-cleanarch was created to keep Clean Architecture rules,
 like a _The Dependency Rule_ and _interaction between modules_ in your Go projects.
-More about Clean Architecture you can read in [our article](https://threedots.tech/post/introducing-clean-architecture/?utm_source=go-cleanarch).
+For more information you should read [our article about Clean Architecture](https://threedots.tech/post/introducing-clean-architecture/?utm_source=go-cleanarch).
 
 
 Some benefits of using Clean Architecture:
@@ -80,8 +80,7 @@ bellow.
 For examples please go to [examples](examples/) directory,
 with contains examples of valid and invalid architectures.
 
-For more informations about Clean Architecture please read [our article](https://threedots.tech/post/introducing-clean-architecture/?utm_source=go-cleanarch).
-
+For more information you should read [our article about Clean Architecture](https://threedots.tech/post/introducing-clean-architecture/?utm_source=go-cleanarch).
 
 ## Installing
 
