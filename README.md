@@ -84,7 +84,7 @@ For more information you should read [our article about Clean Architecture](http
 
 ## Installing
 
-    GO111MODULE=on go get github.com/roblaszczak/go-cleanarch
+    go install github.com/roblaszczak/go-cleanarch@latest
 
 _go-cleanarch was only tested on Linux and also should work on OS X.
 Probably it doesn't work well on Windows._
